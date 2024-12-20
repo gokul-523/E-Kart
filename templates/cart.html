@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart</title>
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+    <style>
+        /* Simple Modal Styling */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .success {
+            border-color: green;
+            background-color: #dff0d8;
+            color: green;
+        }
+
+        .error {
+            border-color: red;
+            background-color: #f2dede;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <a href="{% url 'shop' %}" class="logo">E Kart</a>
+                <ul class="nav-links">
+                    <li><a href="{% url 'shop' %}">Shop</a></li>
+                    <li><a href="{% url 'cart' %}">Cart</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        <div class="cart-header">
+            <h1>Your Shopping Cart</h1>
+        </div>
+    </header>
+
+    <main>
+        {% if cart_items %}
+        <div class="cart-container">
+            {% for cart_item in cart_items %}
+            <div class="cart-item">
+                <div class="details">
+                    <h2>{{ cart_item.item.name }}</h2>
+                    <p class="price">Rs. {{ cart_item.item.price }}</p>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="cart_id" value="{{ cart_item.id }}">
+                        <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1">
+                        <button type="submit" name="update_quantity">Update</button>
+
+                        <button type="submit" name="remove_item">Remove</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>Your cart is empty. <a href="{% url 'shop' %}">Continue Shopping</a></p>
+        {% endif %}
+    </main>
+
+    <!-- Modal for Success/Failure Message -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalMessage" class="alert"></div>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the modal with a message
+        function showModal(message, type) {
+            var modal = document.getElementById("messageModal");
+            var modalMessage = document.getElementById("modalMessage");
+            modal.style.display = "block";
+            modalMessage.textContent = message;
+            modalMessage.className = "alert " + type;
+        }
+
+        // Close the modal
+        function closeModal() {
+            var modal = document.getElementById("messageModal");
+            modal.style.display = "none";
+        }
+
+        // Automatically close the modal after a few seconds
+        window.onload = function() {
+            {% if messages %}
+                {% for message in messages %}
+                    showModal("{{ message }}", "{{ message.tags }}");
+                {% endfor %}
+            {% endif %}
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - E Kart</title>
+    <link rel="stylesheet" href="{% static 'css/shop.css' %}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-container">
+            <a href="{% url 'shop' %}" class="logo">E Kart</a>
+            <ul class="nav-links">
+                <li><a href="{% url 'shop' %}">Shop</a></li>
+                <li><a href="{% url 'cart' %}">Cart</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <h1>Welcome to E Kart</h1>
+            <p>Find treasures at unbeatable prices!</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="shop-container">
+            {% for item in items %}
+            <div class="item-card">
+                <img src="{% static item.image %}" alt="{{ item.name }}" class="product-image">
+                <h2>{{ item.name }}</h2>
+                <p class="description">{{ item.description }}</p>
+                <p class="price">Price: Rs. {{ item.price }}</p>
+                <form method="POST" action="{% url 'add_to_cart' item.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Add to Cart</button>
+                </form>
+            </div>
+            {% empty %}
+            <p class="no-items">No items available at the moment. Check back soon!</p>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>

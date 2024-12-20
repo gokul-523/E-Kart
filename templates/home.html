@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E Kart</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="hero">
+        <div class="container">
+            <h1>Welcome to <span class="highlight">E Kart</span></h1>
+            <p>Find products that match your style and vibe. E Kart is here to make shopping fun, easy, and personalized to your preferences.</p>
+            <a href="{% url 'shop' %}" class="btn-primary">Shop Now</a>
+        </div>
+    </header>
+
+
+
+
+</body>
+</html>

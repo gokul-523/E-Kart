@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }}'s Profile - E Kart</title>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'shop' %}" class="logo">E Kart</a>
+            <ul class="nav-links">
+                <li><a href="{% url 'shop' %}">Shop</a></li>
+                <li><a href="{% url 'cart' %}">Cart</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="profile-header">
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p>Here’s a summary of your account:</p>
+    </header>
+
+    <main>
+        <!-- Summary Section -->
+        <section class="summary-section">
+            <h2>Summary</h2>
+            <ul class="summary">
+                <li>Total Items Ordered: {{ ordered_items|length }}</li>
+                <li>Total Items in Cart: {{ cart_items|length }}</li>
+            </ul>
+        </section>
+
+        <!-- Ordered Items Section -->
+        <section class="ordered-items-section">
+            <h2>My Ordered Items</h2>
+            {% if ordered_items %}
+            <div class="items-container">
+                {% for order in ordered_items %}
+                <div class="item-card">
+                    <h3>{{ order.item.name }}</h3>
+                    <p>{{ order.item.description }}</p>
+                    <p class="price">Rs. {{ order.item.price }}</p>
+                    <p>Order Date: {{ order.order_date }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>You haven’t ordered any items yet.</p>
+            {% endif %}
+        </section>
+
+        <!-- Cart Section -->
+        <section class="cart-section">
+            <h2>My Cart</h2>
+            {% if cart_items %}
+            <div class="items-container">
+                {% for cart_item in cart_items %}
+                <div class="item-card">
+                    <h3>{{ cart_item.item.name }}</h3>
+                    <p>{{ cart_item.item.description }}</p>
+                    <p class="price">Rs. {{ cart_item.item.price }}</p>
+                    <p>Quantity: {{ cart_item.quantity }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <form action="{% url 'place_order' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn">Place Order</button>
+            </form>
+            {% else %}
+            <p>Your cart is empty.</p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

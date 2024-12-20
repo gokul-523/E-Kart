@@ -1,0 +1,100 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}   
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    margin: 0;
+    min-height: 100vh;
+    background-image: url("../images/eCommerce_Platform.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Header Styling */
+header {
+
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    position: relative;
+    border-radius: 0 0 20px 20px;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+header .container {
+    position: relative;
+    z-index: 2;
+}
+
+header h1 {
+    font-size: 8rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+header .highlight {
+    color: #ff9900;
+}
+
+header p {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+}
+
+header .btn-primary {
+    padding: 20px 26px;
+    display: inline-block;
+    background-color: #ff9900;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+header .btn-primary:hover {
+    padding: 20px 26px;
+    background-color: #cc7a00;
+    transform: translateY(-3px);
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 3rem;
+    }
+
+    header p {
+        font-size: 1.5rem;
+    }
+
+    header .btn-primary {
+        font-size: 1.5rem;
+        padding: 10px 20px;
+    }
+
+}
